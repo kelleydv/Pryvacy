@@ -5,7 +5,7 @@ from datetime import date
 from pymongo import MongoClient
 from . import config
 
-app = Flask(__name__, static_folder='static')
+app = Flask(__name__)
 APP_NAME = 'pryvacy'
 
 app.config.from_object('%s.config.Develop' % APP_NAME)
