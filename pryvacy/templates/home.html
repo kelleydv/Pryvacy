@@ -3,44 +3,44 @@
 
 {% block post_head %}
 <style type="text/css">
-	body { overflow: hidden; }
-	.navbar { margin-bottom: 0; }
+  body { overflow: hidden; }
+  .navbar { margin-bottom: 0; }
 </style>
 {% endblock %}
 
 {% block body %}
-	<div id="hero">
-		<div class="container center-vertically">
-			<div class="row">
-				<div class="col-md-12 text-center">
-					<h1>
-						<a class="plain-link" href="https://en.wikipedia.org/wiki/Internet_privacy" target="_blank">
-							Prying Eyes Are Watching!
-						</a>
-					</h1>
-					<hr>
-					{% if not session.get('user') %}
-					<a href="{{ url_for('home.register') }}" class="btn btn-default btn-lg">Register</a>
-					<a href="{{ url_for('home.login') }}" class="btn btn-default btn-lg">Login</a>
-					{% endif %}
-				</div>
-			</div>
-		</div>
-	</div>
+  <div id="hero">
+    <div class="container center-vertically">
+      <div class="row">
+        <div class="col-md-12 text-center">
+          <h1>
+            <a class="plain-link" href="https://en.wikipedia.org/wiki/Internet_privacy" target="_blank">
+              Prying Eyes Are Watching!
+            </a>
+          </h1>
+          <hr>
+          {% if not session.get('user') %}
+          <a href="{{ url_for('home.register') }}" class="btn btn-default btn-lg">Register</a>
+          <a href="{{ url_for('home.login') }}" class="btn btn-default btn-lg">Login</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock %}
 
 {% block post_body %}
 <script type="text/javascript">
-	$(document).ready(function() {
+  $(document).ready(function() {
 
-		var $hero = $('#hero');
-		var $nav = $('nav');
+    var $hero = $('#hero');
+    var $nav = $('nav');
 
-		var size = function() {
-			$hero.height( $(window).height() - ($nav.outerHeight()*2) );
-		};
+    var size = function() {
+      $hero.height( $(window).height() - ($nav.outerHeight()*2) );
+    };
 
-		$(window).on('resize', size).trigger('resize');
-	});
+    $(window).on('resize', size).trigger('resize');
+  });
 </script>
 {% endblock %}
