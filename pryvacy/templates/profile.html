@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+{% block title %}Profile{% endblock %}
+{% block body %}
+	<div class="container">
+		<div class="row">
+			<div class="col-md-8 col-md-offset-2">
+				{% if error %}
+				<div class="alert alert-danger" role="alert">
+					<strong>Error</strong> {{ error }}
+				</div>
+				{% endif %}
+				<div class="panel panel-default">
+					<div class="panel-body">
+						<ul class="nav nav-tabs">
+						  <li role="presentation"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+						  <li role="presentation"><a href="#encryption" role="tab" data-toggle="tab">Encryption</a></li>
+						  <li role="presentation"><a href="#message" role="tab" data-toggle="tab">Message</a></li>
+						</ul>
+						<div class="tab-content">
+					    <div role="tabpanel" class="tab-pane" id="profile">
+								dis some profile content
+							</div>
+					    <div role="tabpanel" class="tab-pane" id="encryption">
+								<div class="row">
+									<div class="md-6">
+									</div>
+									<div class="md-2">
+										<button class="btn btn-default" type="submit">
+											Generate PGP Keys
+										</button>
+									</div>
+								</div>
+							</div>
+					    <div role="tabpanel" class="tab-pane" id="message">
+								senda message
+							</div>
+					  </div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}
