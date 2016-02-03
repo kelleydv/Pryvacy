@@ -13,5 +13,6 @@ class Message(Base):
             'body': body,
             'ip': ip,
             'browser': browser,
-            'timestamp': timestamp()
+            'timestamp': timestamp(),
+            'read': False
         })

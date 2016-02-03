@@ -76,7 +76,8 @@ def page(name=None):
 def feed():
     ip = request.remote_addr
     agent = request.user_agent
-    return render_template('feed.html', session=session)
+    messages = controllers.get_messages()
+    return render_template('feed.html', session=session, messages=messages)
 
 
 @app.route('/dashboard', methods=['GET', 'POST'])
@@ -116,3 +117,22 @@ def decrypt():
     ciphertext = request.args.get('ciphertext')
     username = session['user']['username']
     return jsonify(plaintext=controllers.decrypt(key, ciphertext, username))
+
+
+@app.route('/message/send', methods=['GET', 'POST'])
+def send_message():
+    # TODO: make this a POST request
+    if request.method == 'GET':
+        message = request.args.get('message')
+        recipient = request.args.get('recipient')
+        sender = request.args.get('sender')
+        ip = request.remote_addr
+        browser = request.user_agent.browser
+        error = controllers.send_message(
+            message,
+            recipient,
+            sender,
+            ip,
+            browser
+        )
+        return error

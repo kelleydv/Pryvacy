@@ -5,23 +5,25 @@
     <div class="container center-vertically">
       <div class="row">
         <div class="col-md-8 col-md-offset-2">
+          {% for x in messages %}
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>
-                <span class="text-primary">bobsyeruncle</span>
+                <span class="text-primary">{{ x['sender'] }}</span>
                 <span class="glyphicon glyphicon-arrow-right" aria-hidden="true"></span>
-                <span class="text-success">sallyspy</span>
-                <span class="text-danger pull-right">127.0.0.1</span>
-                <span class="text-warning pull-right">chrome</span>
+                <span class="text-success">{{x ['recipient'] }}</span>
+                <span class="text-danger pull-right">{{ x['ip'] }}</span>
+                <span class="text-warning pull-right">{{ x['browser'] }}</span>
               </h4>
             </div>
             <div class="panel-body">
-              This is a super top secret message that nobody should ever see ever unless they want to be flagged as a super spy and have government agents tracking their data exchange over the web.
+              {{ x['body'] }}
             </div>
             <div class="panel-footer">
-              2016-01-29 22:04:32
+              {{ x['timestamp'][:-7] }}
             </div>
           </div>
+          {% endfor %}
         </div>
       </div>
     </div>

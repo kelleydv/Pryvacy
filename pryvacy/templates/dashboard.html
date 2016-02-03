@@ -1,58 +1,75 @@
 {% extends "layout.html" %}
 {% block title %}Dashboard{% endblock %}
 {% block body %}
-  <div class="container">
-    <div class="row">
-      <div class="col-md-8 col-md-offset-2">
-        {% if error %}
-        <div class="alert alert-danger" role="alert">
-          <strong>Error</strong> {{ error }}
-        </div>
-        {% endif %}
-        <div class="panel panel-default">
-          <div class="panel-body">
-            <ul class="nav nav-tabs">
-              <li role="presentation" class="active"><a href="#dashboard" role="tab" data-toggle="tab">Profile</a></li>
-              <li role="presentation"><a href="#encryption" role="tab" data-toggle="tab">Encryption</a></li>
-              <li role="presentation"><a href="#message" role="tab" data-toggle="tab">Message</a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" role="tabpanel" id="dashboard">
-                <div class="row">
-                  <div class="col-md-8">
-                    <p class="key-area" id="public-key">{{ session['user']['public_key'] }}</p>
-                    <button class="btn btn-default" id="gen">
-                      Generate PGP Keys
-                    </button>
-                  </div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2">
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        <strong>Error</strong> {{ error }}
+      </div>
+      {% endif %}
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <ul class="nav nav-tabs">
+            <li role="presentation" class="active"><a href="#dashboard" role="tab" data-toggle="tab">Profile</a></li>
+            <li role="presentation"><a href="#encryption" role="tab" data-toggle="tab">Encryption</a></li>
+            <li role="presentation"><a href="#message" role="tab" data-toggle="tab">Message</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" role="tabpanel" id="dashboard">
+              <div class="row">
+                <div class="col-md-8">
+                  <p class="key-area" id="public-key">{{ session['user']['public_key'] }}</p>
+                  <button class="btn btn-default" id="gen">
+                    Generate PGP Keys
+                  </button>
                 </div>
               </div>
-              <div role="tabpanel" class="tab-pane" id="encryption">
-                <div class="row">
-                    <div class="col-md-6">
-                      <textarea id="key" rows="3"></textarea>
-                      <textarea id="plaintext" rows="3"></textarea>
-                      <textarea id="ciphertext" rows="3"></textarea>
-                    </div>
-                    <div class="col-md-2">
-                      <button class="btn btn-default" id="encrypt">
-                        Encrypt
-                      </button>
-                      <button class="btn btn-default" id="decrypt">
-                        Decrypt
-                      </button>
-                    </div>
-                  </form>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="encryption">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="key">Key</label>
+                    <textarea class="form-control" id="key" rows="3"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="plaintext">Plain Text</label>
+                    <textarea class="form-control" id="plaintext" rows="3"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="ciphertext">Encrypted Text</label>
+                    <textarea class="form-control" id="ciphertext" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-default" id="encrypt">
+                    Encrypt
+                  </button>
+                  <button class="btn btn-default" id="decrypt">
+                    Decrypt
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+          <div role="tabpanel" class="tab-pane" id="message">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <label for="recipient">Recipient</label>
+                  <textarea class="form-control" id="recipient" rows="1"></textarea>
+                </div>
+                <div class="form-group">
+                  <label for="message-body">Body</label>
+                  <textarea class="form-control" id="message-body" rows="3"></textarea>
                 </div>
               </div>
-              <div role="tabpanel" class="tab-pane" id="message">
-                <div class="row">
-                  <div class="col-md-6">
-                  </div>
-                  <div class="col-md-2">
-                  </div>
-                </div>
-                </div>
+              <div class="col-md-2">
+                <button class="btn btn-default" id="send">
+                  Send
+                </button>
               </div>
             </div>
           </div>
@@ -60,67 +77,90 @@
       </div>
     </div>
   </div>
+</div>
+</div>
+</div>
 {% endblock %}
 
 {% block post_body %}
-  <script type="text/javascript">
-
-    $("#gen").click(function() {
-        $.ajax({
-            url: "{{ url_for('keys') }}",
-            type: "GET",
-            data: {
-              "username": "{{ session['user']['username'] }}",
-              "user_id": "{{ session['user']['_id'] }}"
-            },
-            success: function(response) {
-                element = document.getElementById("public-key")
-                element.innerHTML = response.key;
-            },
-            error: function(error) {
-                console.log(error);
-            }
-        });
-      });
+<script type="text/javascript">
 
 
-      $("#encrypt").click(function() {
-          console.log('butthole')
-          $.ajax({
-              url: "{{ url_for('encrypt') }}",
-              type: "GET",
-              data: {
-                'key': document.getElementById('key').value,
-                'plaintext': document.getElementById('plaintext').value
-              },
-              success: function(response) {
-                  element = document.getElementById("ciphertext")
-                  element.value = response.ciphertext;
-              },
-              error: function(error) {
-                  console.log(error);
-              }
-          });
-        });
+$("#gen").click(function() {
+  $.ajax({
+    url: "{{ url_for('keys') }}",
+    type: "GET",
+    data: {
+      "username": "{{ session['user']['username'] }}",
+      "user_id": "{{ session['user']['_id'] }}"
+    },
+    success: function(response) {
+      element = document.getElementById("public-key")
+      element.innerHTML = response.key;
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  });
+});
 
-        $("#decrypt").click(function() {
-            console.log('rutthole')
-            $.ajax({
-                url: "{{ url_for('decrypt') }}",
-                type: "GET",
-                data: {
-                  'key': document.getElementById('key').value,
-                  'ciphertext': document.getElementById('ciphertext').value
-                },
-                success: function(response) {
-                    element = document.getElementById("plaintext")
-                    element.value = response.plaintext;
-                },
-                error: function(error) {
-                    console.log(error);
-                }
-            });
-          });
 
-  </script>
+$("#encrypt").click(function() {
+  $.ajax({
+    url: "{{ url_for('encrypt') }}",
+    type: "GET",
+    data: {
+      'key': document.getElementById('key').value,
+      'plaintext': document.getElementById('plaintext').value
+    },
+    success: function(response) {
+      element = document.getElementById("ciphertext")
+      element.value = response.ciphertext;
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  });
+});
+
+
+$("#decrypt").click(function() {
+  $.ajax({
+    url: "{{ url_for('decrypt') }}",
+    type: "GET",
+    data: {
+      'key': document.getElementById('key').value,
+      'ciphertext': document.getElementById('ciphertext').value
+    },
+    success: function(response) {
+      element = document.getElementById("plaintext")
+      element.value = response.plaintext;
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  });
+});
+
+
+$("#send").click(function() {
+  $.ajax({
+    url: "{{ url_for('send_message') }}",
+    type: "GET",
+    data: {
+      "message": document.getElementById('message-body').value,
+      "recipient": document.getElementById('recipient').value,
+      "sender": "{{ session['user']['username'] }}"
+    },
+    success: function(response) {
+      alert("message sent")
+    },
+    error: function(error) {
+      console.log(error);
+    }
+  });
+});
+
+
+</script>
 {% endblock %}

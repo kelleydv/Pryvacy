@@ -37,6 +37,24 @@ def get_users_list():
     users = models.User.match_all()
     return [ {'username':x['username'], 'public_key': x['public_key']} for x in users ]
 
+
+def send_message(message, recipient, sender, ip, browser):
+    if not models.User.match(username=recipient):
+        return "No user with this username"
+    models.Message.create(
+        sender,
+        recipient,
+        message,
+        ip,
+        browser
+    )
+
+def get_messages():
+    return models.Message.match_all()
+
+
+
+
 gpg = gnupg.GPG()
 gpg.encoding = 'utf-8'
 
