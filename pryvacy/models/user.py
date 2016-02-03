@@ -10,7 +10,7 @@ class User(Base):
         return cls.collection.insert({
             'username': username,
             'password': get_hash(password),
-            'private_key': None,
+            'rsa_fingerprint': None,
             'public_key': None,
             'last_auth': timestamp()
         })

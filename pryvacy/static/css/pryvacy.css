@@ -32,6 +32,11 @@ form .form-group:last-child{ margin-bottom: 0; }
     color: dodgerblue;
 }
 
+.key-area {
+	word-break: break-all;
+	white-space: pre-wrap;
+}
+
 /* tables */
 table.tablesorter thead tr .header {
 	background-image: url(/static/img/bg.gif);

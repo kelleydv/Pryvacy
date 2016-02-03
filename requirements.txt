@@ -5,3 +5,4 @@ passlib
 requests
 markdown2
 pylint
+gnupg

@@ -1,7 +1,7 @@
 from . import app
 from . import controllers
 from flask import render_template, redirect, url_for, flash
-from flask import session, request
+from flask import session, request, jsonify
 
 import markdown2
 import os
@@ -26,7 +26,7 @@ def register():
         )
         if not error:
             flash('You were successfully registered and can login now')
-            return redirect(url_for('home.login'))
+            return redirect(url_for('login'))
     return render_template('register.html', error=error)
 
 
@@ -76,8 +76,6 @@ def page(name=None):
 def feed():
     ip = request.remote_addr
     agent = request.user_agent
-    print(ip)
-    print(agent.browser)
     return render_template('feed.html', session=session)
 
 
@@ -85,3 +83,31 @@ def feed():
 def profile():
     if request.method == 'GET':
         return render_template('profile.html', session=session)
+
+
+@app.route('/pgp/genkey', methods=['GET', 'POST'])
+def genkeys():
+    user_id = request.args.get('user_id')
+    username = request.args.get('username')
+    return jsonify(key=controllers.gen_pgp_key(user_id, username))
+
+
+@app.route('/pgp/key', methods=['GET', 'POST'])
+def keys():
+    user_id = request.args.get('user_id')
+    username = request.args.get('username')
+    return jsonify(key=controllers.get_key(user_id, username))
+
+@app.route('/encrypt', methods=['GET'])
+def encrypt():
+    key = request.args.get('key')
+    plaintext = request.args.get('plaintext')
+    user_id = session['user']['_id']
+    return jsonify(ciphertext=controllers.encrypt(key, plaintext))
+
+@app.route('/decrypt', methods=['GET'])
+def decrypt():
+    key = request.args.get('key')
+    ciphertext = request.args.get('ciphertext')
+    username = session['user']['username']
+    return jsonify(plaintext=controllers.decrypt(key, ciphertext, username))

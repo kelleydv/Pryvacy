@@ -12,33 +12,44 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <ul class="nav nav-tabs">
-              <li role="presentation"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+              <li role="presentation" class="active"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
               <li role="presentation"><a href="#encryption" role="tab" data-toggle="tab">Encryption</a></li>
               <li role="presentation"><a href="#message" role="tab" data-toggle="tab">Message</a></li>
             </ul>
             <div class="tab-content">
-              <div role="tabpanel" class="tab-pane" id="profile">
-                dis some profile content
+              <div class="tab-pane active" role="tabpanel" id="profile">
+                <div class="row">
+                  <div class="col-md-8">
+                    <p class="key-area" id="public-key">{{ session['user']['public_key'] }}</p>
+                    <button class="btn btn-default" id="gen">
+                      Generate PGP Keys
+                    </button>
+                  </div>
+                </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="encryption">
-                <div class="container">
-                  <div class="row">
-                    <div class="md-6">
-                      some stuff
+                <div class="row">
+                    <div class="col-md-6">
+                      <textarea id="key" rows="3"></textarea>
+                      <textarea id="plaintext" rows="3"></textarea>
+                      <textarea id="ciphertext" rows="3"></textarea>
                     </div>
-                    <div class="md-2">
-                      <button class="btn btn-default" type="submit">
-                        Generate PGP Keys
+                    <div class="col-md-2">
+                      <button class="btn btn-default" id="encrypt">
+                        Encrypt
+                      </button>
+                      <button class="btn btn-default" id="decrypt">
+                        Decrypt
                       </button>
                     </div>
-                  </div>
+                  </form>
                 </div>
               </div>
               <div role="tabpanel" class="tab-pane" id="message">
                 <div class="row">
-                  <div class="md-6">
+                  <div class="col-md-6">
                   </div>
-                  <div class="md-2">
+                  <div class="col-md-2">
                   </div>
                 </div>
                 </div>
@@ -49,4 +60,67 @@
       </div>
     </div>
   </div>
+{% endblock %}
+
+{% block post_body %}
+  <script type="text/javascript">
+
+    $("#gen").click(function() {
+        $.ajax({
+            url: "{{ url_for('keys') }}",
+            type: "GET",
+            data: {
+              "username": "{{ session['user']['username'] }}",
+              "user_id": "{{ session['user']['_id'] }}"
+            },
+            success: function(response) {
+                element = document.getElementById("public-key")
+                element.innerHTML = response.key;
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+      });
+
+
+      $("#encrypt").click(function() {
+          console.log('butthole')
+          $.ajax({
+              url: "{{ url_for('encrypt') }}",
+              type: "GET",
+              data: {
+                'key': document.getElementById('key').value,
+                'plaintext': document.getElementById('plaintext').value
+              },
+              success: function(response) {
+                  element = document.getElementById("ciphertext")
+                  element.value = response.ciphertext;
+              },
+              error: function(error) {
+                  console.log(error);
+              }
+          });
+        });
+
+        $("#decrypt").click(function() {
+            console.log('rutthole')
+            $.ajax({
+                url: "{{ url_for('decrypt') }}",
+                type: "GET",
+                data: {
+                  'key': document.getElementById('key').value,
+                  'ciphertext': document.getElementById('ciphertext').value
+                },
+                success: function(response) {
+                    element = document.getElementById("plaintext")
+                    element.value = response.plaintext;
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+          });
+
+  </script>
 {% endblock %}
