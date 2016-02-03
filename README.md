@@ -1,7 +1,7 @@
 # Pryvacy
 
 #### What is this?
-This is a application designed to generate class discussion and reflection on the topics of internet privacy and encryption.
+This is an application designed to generate class discussion and reflection on the topics of internet privacy and encryption.
 
 #### Requirements
 - [mongoDB](http://www.mongodb.org/)
