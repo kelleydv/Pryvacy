@@ -5,7 +5,7 @@
     <div class="container center-vertically">
       <div class="row">
         {% for x in users %}
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-9 col-md-offset-1">
           <div class="panel panel-default">
             <div class="panel-heading">
               <h4>
@@ -13,7 +13,7 @@
               </h4>
             </div>
             <div class="panel-body">
-              {{ x['public_key'] }}
+              <p class="key-area">{{ x['public_key'] }}</p>
             </div>
           </div>
         </div>

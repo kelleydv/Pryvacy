@@ -83,7 +83,8 @@ def feed():
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if request.method == 'GET':
-        return render_template('dashboard.html', session=session)
+        public_key = controllers.get_key(session['user']['_id'])
+        return render_template('dashboard.html', session=session, public_key=public_key)
 
 @app.route('/users', methods=['GET'])
 def users():
@@ -95,7 +96,8 @@ def users():
 def genkeys():
     user_id = request.args.get('user_id')
     username = request.args.get('username')
-    return jsonify(key=controllers.gen_pgp_key(user_id, username))
+    key = jsonify(key=controllers.gen_pgp_key(user_id, username))
+    return key
 
 
 @app.route('/pgp/key', methods=['GET', 'POST'])
@@ -113,8 +115,8 @@ def encrypt():
 
 @app.route('/decrypt', methods=['GET'])
 def decrypt():
-    key = request.args.get('key')
-    ciphertext = request.args.get('ciphertext')
+    key = request.args.get('key').strip()
+    ciphertext = request.args.get('ciphertext').strip()
     username = session['user']['username']
     return jsonify(plaintext=controllers.decrypt(key, ciphertext, username))
 
@@ -123,7 +125,7 @@ def decrypt():
 def send_message():
     # TODO: make this a POST request
     if request.method == 'GET':
-        message = request.args.get('message')
+        message = request.args.get('message').strip()
         recipient = request.args.get('recipient')
         sender = request.args.get('sender')
         ip = request.remote_addr

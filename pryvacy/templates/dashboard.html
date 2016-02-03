@@ -20,7 +20,7 @@
             <div class="tab-pane active" role="tabpanel" id="dashboard">
               <div class="row">
                 <div class="col-md-8">
-                  <p class="key-area" id="public-key">{{ session['user']['public_key'] }}</p>
+                  <p class="key-area" id="public-key">{{ public_key }}</p>
                   <button class="btn btn-default" id="gen">
                     Generate PGP Keys
                   </button>
@@ -51,25 +51,25 @@
                     Decrypt
                   </button>
                 </div>
-              </form>
-            </div>
-          </div>
-          <div role="tabpanel" class="tab-pane" id="message">
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <label for="recipient">Recipient</label>
-                  <textarea class="form-control" id="recipient" rows="1"></textarea>
-                </div>
-                <div class="form-group">
-                  <label for="message-body">Body</label>
-                  <textarea class="form-control" id="message-body" rows="3"></textarea>
-                </div>
               </div>
-              <div class="col-md-2">
-                <button class="btn btn-default" id="send">
-                  Send
-                </button>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="message">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="recipient">Recipient</label>
+                    <textarea class="form-control" id="recipient" rows="1"></textarea>
+                  </div>
+                  <div class="form-group">
+                    <label for="message-body">Body</label>
+                    <textarea class="form-control" id="message-body" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-2">
+                  <button class="btn btn-default" id="send">
+                    Send
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -78,17 +78,18 @@
     </div>
   </div>
 </div>
-</div>
-</div>
 {% endblock %}
 
 {% block post_body %}
 <script type="text/javascript">
 
+$('.pull-down').each(function() {
+  $(this).css('margin-top', $(this).parent().height()-$(this).height())
+});
 
 $("#gen").click(function() {
   $.ajax({
-    url: "{{ url_for('keys') }}",
+    url: "{{ url_for('genkeys') }}",
     type: "GET",
     data: {
       "username": "{{ session['user']['username'] }}",

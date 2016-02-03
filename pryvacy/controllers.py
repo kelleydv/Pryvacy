@@ -14,6 +14,8 @@ def authenticate_user(username, password):
     user['_id'] = str(user['_id']) # For session data
     return user
 
+def get_user(user_id):
+    return models.User.match(_id=user_id)
 
 def signup(username, password, password2):
     """Register the user, return error or None."""
@@ -62,7 +64,8 @@ def gen_pgp_key(user_id, username):
     input_data = gpg.gen_key_input(
         key_type="RSA",
         key_length=1024,
-        name_real=username
+        name_real=username,
+        name_email="%s@%s" % (username, 'pryvacy')
     )
     key = gpg.gen_key(input_data)
     public_key = gpg.export_keys(key.fingerprint)
@@ -73,9 +76,8 @@ def gen_pgp_key(user_id, username):
     )
     return public_key
 
-def get_key(user_id, username):
-    key = models.User.from_id(user_id).get('public_key')
-    return key
+def get_key(user_id, username=None):
+    return models.User.from_id(user_id).get('public_key')
 
 def encrypt(key, plaintext):
     if not 'PGP PUBLIC KEY' in key:
@@ -101,11 +103,14 @@ def decrypt(key, ciphertext, username):
     message = gpg.decrypt(ciphertext)
 
     #proceed with massive kludge to get username of pub-key from message
+    print(message.stderr)
     for x in message.stderr.split('\n'):
         if '@' in x:
             for y in x.split('"'):
                 if '@' in y:
-                    key_username = y.split()[0]
+                    key_username = y.split()[1]
+                    key_username = key_username[1:key_username.find('@')]
+                    print(key_username)
 
     if username == key_username:
         return str(message)

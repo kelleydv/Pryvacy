@@ -4,7 +4,7 @@
 {% block body %}
     <div class="container center-vertically">
       <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-md-9 col-md-offset-1">
           {% for x in messages %}
           <div class="panel panel-default">
             <div class="panel-heading">
@@ -16,7 +16,7 @@
                 <span class="text-warning pull-right">{{ x['browser'] }}</span>
               </h4>
             </div>
-            <div class="panel-body">
+            <div class="panel-body key-area">
               {{ x['body'] }}
             </div>
             <div class="panel-footer">
