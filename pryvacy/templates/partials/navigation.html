@@ -8,7 +8,7 @@
     <div class="collapse navbar-collapse" id="nav-collapse">
       <ul class="nav navbar-nav">
         <li><a href="{{ url_for('feed') }}">Feed</a></li>
-        <li><a href="#">Users</a></li>
+        <li><a href="{{ url_for('users') }}">Users</a></li>
       </ul>
       {% if session.get('user') %}
       <ul class="nav navbar-nav navbar-right">
@@ -18,7 +18,7 @@
             <span class="caret"></span>
           </a>
           <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-            <li><a href="{{ url_for('profile') }}">Profile</a></li>
+            <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
             <li><a href="{{ url_for('logout') }}">Sign Out</a></li>
           </ul>
         </li>

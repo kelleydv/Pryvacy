@@ -33,6 +33,10 @@ def signup(username, password, password2):
     return error
 
 
+def get_users_list():
+    users = models.User.match_all()
+    return [ {'username':x['username'], 'public_key': x['public_key']} for x in users ]
+
 gpg = gnupg.GPG()
 gpg.encoding = 'utf-8'
 

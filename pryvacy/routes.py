@@ -79,11 +79,16 @@ def feed():
     return render_template('feed.html', session=session)
 
 
-@app.route('/profile', methods=['GET', 'POST'])
-def profile():
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
     if request.method == 'GET':
-        return render_template('profile.html', session=session)
+        return render_template('dashboard.html', session=session)
 
+@app.route('/users', methods=['GET'])
+def users():
+    if request.method == 'GET':
+        users = controllers.get_users_list()
+        return render_template('users.html', session=session, users=users)
 
 @app.route('/pgp/genkey', methods=['GET', 'POST'])
 def genkeys():

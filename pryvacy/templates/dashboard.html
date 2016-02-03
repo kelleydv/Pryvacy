@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}Profile{% endblock %}
+{% block title %}Dashboard{% endblock %}
 {% block body %}
   <div class="container">
     <div class="row">
@@ -12,12 +12,12 @@
         <div class="panel panel-default">
           <div class="panel-body">
             <ul class="nav nav-tabs">
-              <li role="presentation" class="active"><a href="#profile" role="tab" data-toggle="tab">Profile</a></li>
+              <li role="presentation" class="active"><a href="#dashboard" role="tab" data-toggle="tab">Profile</a></li>
               <li role="presentation"><a href="#encryption" role="tab" data-toggle="tab">Encryption</a></li>
               <li role="presentation"><a href="#message" role="tab" data-toggle="tab">Message</a></li>
             </ul>
             <div class="tab-content">
-              <div class="tab-pane active" role="tabpanel" id="profile">
+              <div class="tab-pane active" role="tabpanel" id="dashboard">
                 <div class="row">
                   <div class="col-md-8">
                     <p class="key-area" id="public-key">{{ session['user']['public_key'] }}</p>
