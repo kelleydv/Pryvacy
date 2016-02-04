@@ -76,7 +76,8 @@ def page(name=None):
 def feed():
     ip = request.remote_addr
     agent = request.user_agent
-    messages = controllers.get_messages()
+    messages = list(controllers.get_messages())
+    messages.reverse() #newest first
     return render_template('feed.html', session=session, messages=messages)
 
 
