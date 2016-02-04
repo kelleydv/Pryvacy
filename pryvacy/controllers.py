@@ -17,6 +17,12 @@ def authenticate_user(username, password):
 def get_user(user_id):
     return models.User.match(_id=user_id)
 
+def get_usernames():
+    names = [x['username'] for x in models.User.match_all()]
+    print(names)
+    return names
+
+
 def signup(username, password, password2):
     """Register the user, return error or None."""
     if models.User.match(username=username):

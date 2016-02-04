@@ -5,6 +5,8 @@ from flask import session, request, jsonify
 
 import markdown2
 import os
+import random
+import json
 
 
 @app.route('/')
@@ -74,6 +76,8 @@ def page(name=None):
 
 @app.route('/feed')
 def feed():
+    if not session.get('user'):
+        redirect(url_for('login'))
     ip = request.remote_addr
     agent = request.user_agent
     messages = list(controllers.get_messages())
@@ -83,18 +87,25 @@ def feed():
 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
+    if not session.get('user'):
+        redirect(url_for('login'))
     if request.method == 'GET':
         public_key = controllers.get_key(session['user']['_id'])
-        return render_template('dashboard.html', session=session, public_key=public_key)
+        unames = controllers.get_usernames()
+        return render_template('dashboard.html', session=session, public_key=public_key, unames=json.dumps(unames))
 
 @app.route('/users', methods=['GET'])
 def users():
+    if not session.get('user'):
+        redirect(url_for('login'))
     if request.method == 'GET':
         users = controllers.get_users_list()
         return render_template('users.html', session=session, users=users)
 
 @app.route('/pgp/genkey', methods=['GET', 'POST'])
 def genkeys():
+    if not session.get('user'):
+        redirect(url_for('login'))
     user_id = request.args.get('user_id')
     username = request.args.get('username')
     key = jsonify(key=controllers.gen_pgp_key(user_id, username))
@@ -103,12 +114,16 @@ def genkeys():
 
 @app.route('/pgp/key', methods=['GET', 'POST'])
 def keys():
+    if not session.get('user'):
+        redirect(url_for('login'))
     user_id = request.args.get('user_id')
     username = request.args.get('username')
     return jsonify(key=controllers.get_key(user_id, username))
 
 @app.route('/encrypt', methods=['GET'])
 def encrypt():
+    if not session.get('user'):
+        redirect(url_for('login'))
     key = request.args.get('key')
     plaintext = request.args.get('plaintext')
     user_id = session['user']['_id']
@@ -116,6 +131,8 @@ def encrypt():
 
 @app.route('/decrypt', methods=['GET'])
 def decrypt():
+    if not session.get('user'):
+        redirect(url_for('login'))
     key = request.args.get('key').strip()
     ciphertext = request.args.get('ciphertext').strip()
     username = session['user']['username']
@@ -124,6 +141,8 @@ def decrypt():
 
 @app.route('/message/send', methods=['GET', 'POST'])
 def send_message():
+    if not session.get('user'):
+        redirect(url_for('login'))
     # TODO: make this a POST request
     if request.method == 'GET':
         message = request.args.get('message').strip()
@@ -139,3 +158,9 @@ def send_message():
             browser
         )
         return error
+
+@app.route('/message/random', methods=['GET'])
+def random_message():
+    with open('pryvacy/content/phrases.txt') as f:
+        message = random.choice(list(f.readlines()))
+    return jsonify(message=message)
