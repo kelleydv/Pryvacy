@@ -20,7 +20,7 @@
             <div class="tab-pane active" role="tabpanel" id="dashboard">
               <div class="row">
                 <div class="col-md-8">
-                  <p class="key-area" id="public-key">{{ public_key }}</p>
+                  <textarea class="form-control key-area" id="public-key" readonly data-select>{{ public_key }}</textarea>
                   <button class="btn btn-default" id="gen">
                     Generate PGP Keys
                   </button>
@@ -107,21 +107,27 @@
 {% block post_body %}
 <script type="text/javascript">
 
+// This looks like a smell. I wouldn't do whatever this is doing.
 $('.pull-down').each(function() {
   $(this).css('margin-top', $(this).parent().height()-$(this).height())
 });
 
-$("#gen").click(function() {
+/**
+ * Consider using jQuerys .serialize function to extract data from forms easily.
+ * $('#my-form').serialize() // return 'foo=bar&hello=world'
+ * That can be passed directly to the `data` attribute in Ajax functions (via jQuery)
+ */
+
+$(document).on('click', '#gen', function() {
   $.ajax({
     url: "{{ url_for('genkeys') }}",
     type: "GET",
     data: {
-      "username": "{{ session['user']['username'] }}",
-      "user_id": "{{ session['user']['_id'] }}"
+      username: "{{ session['user']['username'] }}",
+      user_id: "{{ session['user']['_id'] }}"
     },
     success: function(response) {
-      element = document.getElementById("public-key")
-      element.innerHTML = response.key;
+      $("#public-key").val(response.key);
     },
     error: function(error) {
       console.log(error);
@@ -130,17 +136,16 @@ $("#gen").click(function() {
 });
 
 
-$("#encrypt").click(function() {
+$(document).on('click', '#encrypt', function() {
   $.ajax({
     url: "{{ url_for('encrypt') }}",
     type: "GET",
     data: {
-      'key': document.getElementById('key').value,
-      'plaintext': document.getElementById('plaintext').value
+      key: $('#key').val(),
+      plaintext: $('#plaintext').val()
     },
     success: function(response) {
-      element = document.getElementById("ciphertext")
-      element.value = response.ciphertext;
+      $("#ciphertext").text(response.ciphertext);
     },
     error: function(error) {
       console.log(error);
@@ -149,17 +154,16 @@ $("#encrypt").click(function() {
 });
 
 
-$("#decrypt").click(function() {
+$(document).on('click', "#decrypt", function() {
   $.ajax({
     url: "{{ url_for('decrypt') }}",
     type: "GET",
     data: {
-      'key': document.getElementById('key').value,
-      'ciphertext': document.getElementById('ciphertext').value
+      key: $('#key').val(),
+      ciphertext: $('#ciphertext').val()
     },
     success: function(response) {
-      element = document.getElementById("plaintext")
-      element.value = response.plaintext;
+      $('#plaintext').text(response.plaintext);
     },
     error: function(error) {
       console.log(error);
@@ -168,14 +172,14 @@ $("#decrypt").click(function() {
 });
 
 
-$("#send").click(function() {
+$(document).on('click', "#send", function() {
   $.ajax({
     url: "{{ url_for('send_message') }}",
     type: "GET",
     data: {
-      "message": document.getElementById('message-body').value,
-      "recipient": document.getElementById('recipient').value,
-      "sender": "{{ session['user']['username'] }}"
+      message: $('#message-body').val(),
+      recipient: $('#recipient').val(),
+      sender: "{{ session['user']['username'] }}"
     },
     success: function(response) {
       alert("message sent")
@@ -186,6 +190,7 @@ $("#send").click(function() {
   });
 });
 
+$(document).on('click', '[data-select]', function () { this.select(); })
 
 </script>
 {% endblock %}
