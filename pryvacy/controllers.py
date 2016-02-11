@@ -19,7 +19,6 @@ def get_user(user_id):
 
 def get_usernames():
     names = [x['username'] for x in models.User.match_all()]
-    print(names)
     return names
 
 
@@ -109,14 +108,13 @@ def decrypt(key, ciphertext, username):
     message = gpg.decrypt(ciphertext)
 
     #proceed with massive kludge to get username of pub-key from message
-    print(message.stderr)
+    #print(message.stderr)
     for x in message.stderr.split('\n'):
         if '@' in x:
             for y in x.split('"'):
                 if '@' in y:
                     key_username = y.split()[1]
                     key_username = key_username[1:key_username.find('@')]
-                    print(key_username)
 
     if username == key_username:
         return str(message)

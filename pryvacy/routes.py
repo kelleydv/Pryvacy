@@ -146,7 +146,7 @@ def send_message():
     # TODO: make this a POST request
     if request.method == 'GET':
         message = request.args.get('message').strip()
-        recipient = request.args.get('recipient')
+        recipient = request.args.get('recipient').strip()
         sender = request.args.get('sender')
         ip = request.remote_addr
         browser = request.user_agent.browser
@@ -157,7 +157,7 @@ def send_message():
             ip,
             browser
         )
-        return error
+        return jsonify(error=error)
 
 @app.route('/message/random', methods=['GET'])
 def random_message():

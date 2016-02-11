@@ -108,12 +108,10 @@
 {% endblock %}
 
 {% block post_body %}
-<script type="text/javascript">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/jquery.textcomplete.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.textcomplete.min.js') }}"></script>
 
-// This looks like a smell. I wouldn't do whatever this is doing.
-$('.pull-down').each(function() {
-  $(this).css('margin-top', $(this).parent().height()-$(this).height())
-});
+<script type=text/javascript>
 
 /**
  * Consider using jQuerys .serialize function to extract data from forms easily.
@@ -185,7 +183,12 @@ $(document).on('click', "#send", function() {
       sender: "{{ session['user']['username'] }}"
     },
     success: function(response) {
-      alert("message sent")
+      if (response.error) {
+        alert(response.error)
+      } else {
+        $('#message-body').val('');
+        $('#recipient').val('');
+      }
     },
     error: function(error) {
       console.log(error);
@@ -198,7 +201,7 @@ $(document).on('click', "#random", function() {
     url: "{{ url_for('random_message') }}",
     type: "GET",
     success: function(response) {
-      $('#message-body').text(response.message);
+      $('#message-body').val(response.message);
     },
     error: function(error) {
       console.log(error);
@@ -206,12 +209,19 @@ $(document).on('click', "#random", function() {
   });
 });
 
-$(function() {
-    var availableTags = {{ unames|safe }};
-    $( "#unames" ).autocomplete({
-      "lookup": availableTags
-    });
-  });
+
+$('#recipient').textcomplete([{
+    match: /(^|\b)(\w{1,})$/,
+    search: function (term, callback) {
+        var words = {{ unames|safe }};
+        callback($.map(words, function (word) {
+            return word.indexOf(term) === 0 ? word : null;
+        }));
+    },
+    replace: function (word) {
+        return word;
+    }
+}]);
 
 
 $(document).on('click', '[data-select]', function () { this.select(); })
