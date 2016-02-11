@@ -61,9 +61,13 @@ table.tablesorter thead tr .headerSortDown {
 .key-area {
 	display: block;
 	min-height: 300px;
-	margin: 20px 0;
+	margin-bottom: 20px;
 }
 [data-select] { cursor: pointer; }
+
+.tab-pane {
+	padding-top: 20px;
+}
 
 .love {
 	color: crimson;

@@ -16,12 +16,13 @@
             <li role="presentation"><a href="#encryption" role="tab" data-toggle="tab">Encryption</a></li>
             <li role="presentation"><a href="#message" role="tab" data-toggle="tab">Message</a></li>
           </ul>
+
           <div class="tab-content">
             <div class="tab-pane active" role="tabpanel" id="dashboard">
               <div class="row">
                 <div class="col-md-8">
                   <textarea class="form-control key-area" id="public-key" readonly data-select>{{ public_key }}</textarea>
-                  <button class="btn btn-default" id="gen">
+                  <button class="btn btn-primary" id="gen">
                     Generate PGP Keys
                   </button>
                 </div>
@@ -43,11 +44,11 @@
                     <textarea class="form-control" id="ciphertext" rows="3"></textarea>
                   </div>
                 </div>
-                <div class="col-md-2">
-                  <button class="btn btn-default" id="encrypt">
+                <div class="col-md-6">
+                  <button class="btn btn-primary btn-block" id="encrypt">
                     Encrypt
                   </button>
-                  <button class="btn btn-default" id="decrypt">
+                  <button class="btn btn-default btn-block" id="decrypt">
                     Decrypt
                   </button>
                 </div>
@@ -65,17 +66,24 @@
                     <textarea class="form-control" id="message-body" rows="3"></textarea>
                   </div>
                 </div>
-                <div class="col-md-2">
-                  <button class="btn btn-default" id="send">
+                <div class="col-md-6">
+                  <button class="btn btn-primary btn-block" id="send">
                     Send
                   </button>
-                  <button class="btn btn-default" id="random">
+                  <button class="btn btn-default btn-block" id="random">
                     Random
                   </button>
                 </div>
               </div>
+              <hr />
               <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label for="recieved-message-body">Message</label>
+                    <textarea class="form-control" id="recieved-message-body" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="col-md-6">
                   <table id="messages" class="table table-sorter">
                     <thead>
                       <tr>
@@ -91,21 +99,20 @@
                       </tr>
                       {% endfor %}
                     </tbody>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-group">
-                    <label for="recieved-message-body">Message</label>
-                    <textarea class="form-control" id="recieved-message-body" rows="3"></textarea>
-                  </div>
+                  </table>
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+          </div> <!-- /.tab-content -->
+
+        </div> <!-- /.panel-body -->
+
+      </div> <!-- /.panel -->
+    </div><!-- /.cols -->
+
+  </div> <!-- /.row -->
+</div> <!-- /.container -->
+
 {% endblock %}
 
 {% block post_body %}
