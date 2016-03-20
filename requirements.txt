@@ -6,3 +6,4 @@ requests
 markdown2
 pylint
 gnupg
+gunicorn
